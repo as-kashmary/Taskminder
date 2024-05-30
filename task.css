@@ -1,0 +1,174 @@
+/* Styles for the full body */
+.full-body {
+  font-family: Arial, sans-serif;
+}
+
+/* Styles for the header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100px;
+  margin: 10px;
+  background-color: #f0f0f0;
+}
+
+
+
+/* Styles for the navbar */
+.navbar a {
+  margin-right: 20px;
+  color: #333;
+  text-decoration: none;
+}
+
+/* Styles for the greeting */
+.greeting {
+  text-align: center;
+  margin-top: 20px;
+  font-weight: bold;
+}
+
+/* Styles for the table container */
+.tableContainer {
+
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 75%;
+  margin-left: 100px;
+}
+
+/* Styles for the table */
+
+
+
+/* Styles for the task div */
+.task-div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  box-sizing: border-box;
+  width: 1300px;
+  box-shadow: 0 0 2px rgba(23, 26, 31, 0.12), 0 0 1px rgba(23, 26, 31, 0.07);
+  border-radius: 10px;
+  background-color: #a9dcfa;
+  padding: 20px 20px 10px 20px;
+  gap: 20px;
+  max-width: 100%;
+}
+.task-div img {
+/* Adjust as needed */
+/* Adjust as needed */
+  padding-bottom: 10px; /* Adjust as needed */
+}
+.image{
+  margin-right: 5px;
+}
+.div-span-1{
+  display: flex;
+  align-items: center;
+}
+.div-span-2{
+  color: rgb(15, 186, 15);
+  margin-left: auto;
+}
+
+
+
+/* Styles for the sub-task div */
+.sub-task-div {
+  display: flex;
+  flex-direction: row;
+  justify-content:flex-start;
+  align-items:center;
+  padding: 10px 10px 10px 10px;
+  background-color: #26a7f2;
+  margin-top: 10px;
+  margin-left: 15px;
+  margin-bottom: 5px;
+  gap: 20px;
+  max-width: 100%;
+  border-radius: 10px;
+}
+.span2{
+  border: 1px #430101 solid;
+  border-radius: 5px;
+  color: #f5f0ff;
+  padding: 5px;
+  margin-left: auto;
+}
+
+/* Styles for the checkbox */
+.checkbox {
+  margin-right: 10px;
+}
+
+/* Styles for the add button */
+.add-button {
+  background-color: #6d31ed;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  margin-left: 20px;
+  font-weight: bold;
+  font-size: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.add-button:hover {
+  background-color: #4c1c9d;
+}
+
+
+#add-task-button {
+  margin-left: 180px;
+  margin-top: 50px;
+  align-self: center;
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 16px;
+  text-align: center;
+  text-decoration: none;
+  border: 2px solid #4CAF50;
+  color: #4CAF50;
+  background-color: transparent;
+  border-radius: 5px;
+  transition: background-color 0.3s, color 0.3s;
+  cursor: pointer;
+  width:200px;
+}
+
+#add-task-button:hover {
+  background-color: #4CAF50;
+  color: white;
+}
+
+/* CSS for enlarging the checkbox */
+.sub-task-div input[type="checkbox"] {
+  transform: scale(1.5); /* Adjust the scale factor as needed */
+}
+
+.editLink{
+  text-decoration: none;
+  display: contents;
+}
+.editLink img{
+  height: 20px;
+
+}
+
+.del{
+  text-decoration: none;
+  display: contents;
+}
+.del img{
+  height: 20px;
+
+}
+.logo{
+  width: 500px;
+  height: 200px;
+}

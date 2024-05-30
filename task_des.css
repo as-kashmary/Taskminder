@@ -1,0 +1,88 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f2f2f2;
+  }
+  
+  .container {
+    width: 800px;
+    height: 400px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .input-container {
+    margin-bottom: 20px;
+  }
+  
+  input[type="text"], textarea {
+    width: 780px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  .title{
+    margin-bottom: auto;
+  }
+  .des{
+    margin-bottom: auto;
+  }
+  
+  textarea {
+    height: 150px;
+  }
+  
+  .button-container {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .button-container button {
+    display: flex;
+    flex-direction: row;
+    padding: 10px 20px;
+    margin-left: 10px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+  }
+  
+  #backBtn {
+    
+    margin-right: auto;
+    background-color: #2ecc71; /* Green */
+  }
+  #backBtn img{
+    height: 20px;
+    margin-right: 5px;
+  }
+  
+  #cancelBtn {
+    background-color: #e74c3c; /* Red */
+  }
+  #cancelBtn img{
+    height: 20px;
+    margin-right: 5px;
+  }
+  
+  #saveBtn {
+    background-color: #3498db; /* Blue */
+  }
+  #saveBtn img{
+    height: 20px;
+    margin-right: 5px;
+  }
+  
+  /* Hover effects */
+  .button-container button:hover {
+    opacity: 0.8;
+  }

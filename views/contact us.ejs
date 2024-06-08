@@ -1,0 +1,66 @@
+<html lang="en">
+  <head>
+    <link rel="stylesheet" type="text/css" href="contact.css">
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css">
+    <title>Contact us</title>
+  </head>
+  <body>
+    <div class="header">
+        <div><img src="logo.png" alt="" class="logo"></div>
+        <nav class="navbar">
+            <a href="/">Home</a>
+            <a href="feature">Features</a>
+            <a href="calender">Calendar</a>
+            <a href="clock.html">Timer</a>
+            <a href="about">About Us</a>
+            <% if (!user || Object.keys(user).length === 0) { %>
+                <a href="signin">Login</a>
+            <% } else { %>
+                <button id="profile" onclick="window.location.href='/profile'" style="height: 40px; width: 60px;">
+                    <img src="user.svg" alt="" style="height: 20px;">
+                    <%=user.name%>
+                </button>
+            <% } %>
+        </nav>
+    </div>
+    <section id="about">
+      <div class="about-1">
+        <h1>Contact US</h1>
+        <p>Feel free to share your ideas regarding TaskMinder</p>
+      </div>
+      <div id="about-2">
+        
+            <div class="row">
+              <div class="col-md-4">
+                <div class="about-item text-center">
+                    <img src="phone-solid.svg" alt="">
+                    <h3>Phone number</h3>
+                    <hr>
+                    <p>+8801303791658</p>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="about-item text-center">
+                    <img src="envelope-solid (1).svg" alt="">
+                    <h3>Email</h3>
+                    <hr>
+                    <p>u2004022@student.cuet.ac.bd</p>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="about-item text-center">
+                    <img src="map-solid.svg" alt="">
+                    <h3>Location</h3>
+                    <hr>
+                    <p>CUET</p>
+                </div>
+              </div>
+
+            </div>
+         
+      </div>
+    </section>
+    
+    <script src="bootstrap.bundle.min.js"></script>
+  </body>
+</html>

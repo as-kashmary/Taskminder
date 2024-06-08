@@ -1,0 +1,66 @@
+<html lang="en">
+  <head>
+    <link rel="stylesheet" type="text/css" href="about.css">
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css">
+    <title>About us</title>
+  </head>
+  <body>
+    <div class="header">
+        <div><img src="logo.png" alt="" class="logo"></div>
+        <nav class="navbar">
+            <a href="/">Home</a>
+            <a href="feature">Features</a>
+            <a href="clock.html">Timer</a>
+            <a href="calender">calender</a>
+            <a href="contact us">Contact Us</a>
+            <% if (!user || Object.keys(user).length === 0) { %>
+                <a href="signin">Login</a>
+            <% } else { %>
+                <button id="profile" onclick="window.location.href='/profile'" style="height: 40px; width: 60px;">
+                    <img src="user.svg" alt="" style="height: 20px;">
+                    <%=user.name%>
+                </button>
+            <% } %>
+        </nav>
+    </div>
+    <section id="about">
+      <div class="about-1">
+        <h1>ABOUT US</h1>
+        <p>We are a company dedicated to providing excellent service and innovative solutions.</p>
+      </div>
+      <div id="about-2">
+        
+            <div class="row">
+              <div class="col-md-4">
+                <div class="about-item text-center">
+                    <img src="user.svg" alt="">
+                    <h3>Huraira</h3>
+                    <hr>
+                    <p>Our mission is to lead the industry through innovation and customer satisfaction.</p>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="about-item text-center">
+                    <img src="user.svg" alt="">
+                    <h3>Kashmary</h3>
+                    <hr>
+                    <p>We envision a future where our services enhance lives globally.</p>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="about-item text-center">
+                    <img src="user.svg" alt="">
+                    <h3>Adnan</h3>
+                    <hr>
+                    <p>We have been recognized as industry leaders and innovators.</p>
+                </div>
+              </div>
+
+            </div>
+         
+      </div>
+    </section>
+    
+    <script src="bootstrap.bundle.min.js"></script>
+  </body>
+</html>

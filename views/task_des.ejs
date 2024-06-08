@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Input Page</title>
+  <link rel="stylesheet" href="task_des.css">
+</head>
+<body>
+  <div class="container">
+    <div class="input-container">
+      <h4 class="title">Title</h4>
+      <input type="text" id="input" >
+      <h4 class="des">Description</h4>
+      <textarea id="description" ></textarea>
+    </div>
+    <div class="button-container">
+      
+      <button id="backBtn" onclick="back()"><img src="leftb.svg" alt="">Back</button>
+      <button id="cancelBtn" onclick="cancel()"><img src="cancel.svg" alt="">Cancel</button>
+      <button id="saveBtn" onclick="save()"><img src="saveb.svg" alt="">Save</button>
+    </div>
+  </div>
+  <script>
+        // Embed the server-side variable in a script tag
+        const taskdate = '<%= taskdate %>';
+  </script>
+  <script src="task_des.js"></script>
+  
+</body>
+</html>

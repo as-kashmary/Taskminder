@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Tasks</title>
+    <link rel="stylesheet" href="task.css">
+</head>
+
+<body>
+    <div class="full-body">
+
+        <div class="header">
+            <div><img src="logo.png" alt="" class="logo"></div>
+            <nav class="navbar">
+                <a href="/">Home</a>
+                <a href="feature">Features</a>
+                <a href="calender">Calendar</a>
+                <a href="clock.html">Timer</a>
+                <a href="about">About Us</a>
+                <a href="contact us">Contact Us</a>
+                <button id="profile" onclick="redirectToProfile()">
+                    <img src="user.svg" alt="" style="height: 30px; width: 30px;"><%=user1.name%>
+                </button>
+
+            </nav>
+        </div>
+
+        <div class="greeting">
+            <h2>Good Morning, <%=user1.name%></h2>
+            <p>What are your plans for <%=taskdate%>?</p>
+        </div>
+        
+        <div class="tableContainer" id="tableContainer">
+            <table id="task-table"></table>
+            <button id="add-task-button" onclick="addTask()">Add Task</button>
+            <script src="task.js"></script>
+            
+        </div>
+    </div>
+    <script>
+        // Embed the server-side variable in a script tag
+        const taskdate = '<%= taskdate %>';
+    </script>
+</body>
+
+</html>

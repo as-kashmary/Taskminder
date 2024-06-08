@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>features</title>
+    <link rel="stylesheet" href="feature.css" />
+</head>
+<body>
+    <div class="header">
+        <div><img src="logo.png" alt="" class="logo"></div>
+        <nav class="navbar">
+            <a href="/">Home</a>
+            <a href="calender">Calendar</a>
+            <a href="clock.html">Timer</a>
+            <a href="about">About Us</a>
+            <a href="contact us">Contact Us</a>
+            <% if (!user || Object.keys(user).length === 0) { %>
+                <a href="signin">Login</a>
+            <% } else { %>
+                <button id="profile" onclick="window.location.href='/profile'" style="height: 40px; width: 60px;">
+                    <img src="user.svg" alt="" style="height: 20px;">
+                    <%=user.name%>
+                </button>
+            <% } %>
+        </nav>
+    </div>
+    <section id="features">
+        <div class="container">
+            <div class="features_top">
+                <h1>Our product</h1>
+                <p>TaskMinder is a dynamic and versatile task management platform designed to streamline organization, boost productivity, and facilitate effective time management. Whether you're an individual seeking to manage personal tasks or part of a team collaborating on projects, TaskMinder provides a comprehensive suite of features to help you stay on top of your commitments.</p>
+            </div>
+        </div>
+        <div class="features_container">
+            <div class="feature__item">
+                <img src="task.svg" alt="">
+
+                <div class="featureItem__info">
+                    <h4>Create Task</h4>
+                    <p>creating tasks is a seamless process designed to empower users to capture their goals, deadlines, and commitments effortlessly</p>
+                </div>
+
+            </div>
+            <div class="feature__item">
+                <img src="subtask.svg" alt="">
+
+                <div class="featureItem__info">
+                    <h4>Subtask</h4>
+                    <p>Can create subtask of a particular task</p>
+                </div>
+
+            </div>
+            <div class="feature__item">
+                <img src="timer.svg" alt="">
+
+                <div class="featureItem__info">
+                    <h4>Timer</h4>
+                    <p>Can create timer for your particular goal</p>
+                </div>
+
+            </div>
+            <div class="feature__item">
+                <img src="calender.svg" alt="">
+
+                <div class="featureItem__info">
+                    <h4>Calendar</h4>
+                    <p>Can view your future tasks</p>
+                </div>
+
+            </div>
+            <div class="feature__item">
+                <img src="backup.svg" alt="">
+
+                <div class="featureItem__info">
+                    <h4>Save your future tasks</h4>
+                    <p>You can save your future tasks on the go</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+</body>
+</html>

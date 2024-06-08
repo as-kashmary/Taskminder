@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="userdash.css">
+</head>
+
+<body>
+    <div class="header">
+        <div><img src="logo.png" alt="" class="logo"></div>
+        <nav class="navbar">
+            <a href="/">Home</a>
+            <a href="feature">Features</a>
+            <a href="calender">Calendar</a>
+            <a href="clock.html">Timer</a>
+            <a href="about">About Us</a>
+            <a href="contact us">Contact Us</a>
+            <% if (!user || Object.keys(user).length === 0) { %>
+                <a href="signin">Login</a>
+            <% } else { %>
+                <button id="profile" onclick="window.location.href='/profile'" style="height: 80px; width: 80px;">
+                    <img src="user.svg" alt="" style="height: 20px;">
+                    <%=user.name%>
+                </button>
+            <% } %>
+        </nav>
+    </div>
+    <div class="container">
+        <!-- Sidebar -->
+        
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="greeting">
+                <h2>Good Morning, <%= user.name %></h2>
+            </div>
+            
+
+            <main>
+                <section id="profile">
+                    <h2>Profile</h2>
+                    <div id="profile-info">
+                        <!-- User's profile information will be displayed here -->
+                        <p>Name: <%= user.name %></p>
+                        <p>Email: <%= user.email %></p>
+                        
+                    </div>
+                    
+                </section>
+
+                <section id="progress-overview">
+                    <h2>Progress Overview</h2>
+                    <div id="progress-info">
+                        <!-- Progress information will be displayed here -->
+                    </div>
+                </section>
+                <button id="add-task-button" onclick="logout()">Logout</button>
+               
+
+                
+            </main>
+        </div>
+    </div>
+    <script>
+    document.getElementById('add-task-button').addEventListener('click', function() {
+        fetch('/logout')
+            .then(response => response.text())
+            .then(data => {
+                console.log(data); // For debugging
+                window.location.href = '/signin';
+            })
+            .catch(error => {
+            console.error('Error:', error);
+            });
+        });
+    </script>
+    <script src="userdash.js"></script>
+</body>
+
+</html>

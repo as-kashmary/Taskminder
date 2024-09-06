@@ -32,13 +32,23 @@
         <div class="tableContainer" id="tableContainer">
             <table id="task-table"></table>
             <button id="add-task-button" onclick="addTask()">Add Task</button>
-            <script src="task.js"></script>
             
+            <form id="task-form">
+                <button id="save-task-button" type="submit">Save</button>
+            </form>
+
+            <script src="task.js"></script>
         </div>
+        
     </div>
     <script>
-        // Embed the server-side variable in a script tag
         const taskdate = '<%= taskdate %>';
+        document.getElementById('task-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevents the default form submission
+            saveTaskToServer(); // Call your function to handle data and send it
+        });
+        // Embed the server-side variable in a script tag
+        
     </script>
 </body>
 

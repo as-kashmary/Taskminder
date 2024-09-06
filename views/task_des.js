@@ -1,6 +1,6 @@
 function back() {
     // Redirect to another page
-    window.location.href = "/task";
+    window.location.href = `/task?date=${encodeURIComponent(taskdate)}`;
 };
   
  function save() {
@@ -13,5 +13,4 @@ function back() {
     document.getElementById("input").value = "";
     document.getElementById("description").value = "";
   };
-console.log(taskdate);
   

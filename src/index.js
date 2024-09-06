@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require("path");
 const collection = require("./config");
+const Task = require("./task");
 const bcrypt = require('bcrypt');
 const session = require('express-session');
 
@@ -37,12 +38,63 @@ app.get('/about', (req, res) => {
     res.render("about", { user: req.session.user });
 });
 
-app.get("/calender", (req, res) => {
+app.get("/calender", async(req, res) => {
     if (!req.session.user) {
         return res.redirect("/signin");
     }
+    try {
+        const tasks = await Task.find({ email:req.session.user.email});
+        const eventsArr = [];
+        tasks.forEach(task => {
+            // Convert task.date string to Date object
+            const taskDate = task.date;
+            const [day, monthName, year] = taskDate.split(' ');
+
+            // Step 2: Create a mapping from month names to month numbers
+            const monthMapping = {
+            January: 1,
+            February: 2,
+            March: 3,
+            April: 4,
+            May: 5,
+            June: 6,
+            July: 7,
+            August: 8,
+            September: 9,
+            October: 10,
+            November: 11,
+            December: 12
+            };
+            // Extract day, month, year from Date object
+            
+            const month = monthMapping[monthName]; // Months are zero-indexed, so add 1
+            
+            
+            // Create event object for eventsArr
+            const event = {
+                day: Number(day),
+                month: month,
+                year: Number(year),
+                events: [
+                {
+                    title: task.title,
+                    
+                }
+                ]
+            };
+        
+            eventsArr.push(event);
+           
+        });
+        console.log(eventsArr);
+        res.render("calender", {  user: req.session.user,eventsArr });
+                
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error loading tasks');
+    }
     //console.log('User data saved to session:', req.session.user);
-    res.render("calender", { user: req.session.user });
+    
 });
 app.get("/contact%20us", (req, res) => {
     res.render("contact us", { user: req.session.user });
@@ -59,10 +111,112 @@ app.get('/task', (req, res) => {
     const user1 = req.session.user;
     res.render("task", { taskdate,user1 });
 });
+app.post('/save-task', async (req, res) => {
+    const { taskdate, tasks } = req.body;
+    //console.log(req.body);
+    // const taskdate= req.body.taskdate;
+    // const tasks= req.body.tasks;
+    // Validate the input
+    if (taskdate===null || Array.isArray(tasks)===null) {
+        
+        return res.status(400).send('Invalid task data');
+    }
+
+    // Validate session user
+    if (!req.session.user || !req.session.user.email) {
+        return res.status(401).send('Unauthorized');
+    }
+
+    try {
+        // Log tasks for debugging purposes
+        //console.log('Tasks:', tasks);
+
+        // Delete existing tasks for the given date
+        await Task.deleteMany({ date: taskdate });
+
+        // Prepare the new tasks for insertion
+        const newTasks = tasks.map(task => ({
+            email: req.session.user.email,
+            date: taskdate,
+            title: task.content,
+            description:  "", // Use provided description or default to an empty string
+            subtasks: task.subtasks ? task.subtasks.map(subtask => ({
+                title: subtask.content,
+                description:  "" // Use provided description or default to an empty string
+            })) : []
+        }));
+
+        // Insert the new tasks in a single bulk operation
+        await Task.insertMany(newTasks);
+
+        res.status(200).send('Tasks saved successfully');
+    } catch (err) {
+        console.error('Error saving tasks to MongoDB:', err);
+        res.status(500).send('Error saving tasks');
+    }
+});
+app.get('/load-tasks', async (req, res) => {
+    const taskdate = req.query.date;
+
+    try {
+        const tasks = await Task.find({ email:req.session.user.email ,date: taskdate });
+        res.status(200).json(tasks);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error loading tasks');
+    }
+});
 app.get('/task_des', (req, res) => {
     const taskdate = req.query.taskdate;
-    res.render("task_des",{taskdate});
+    const parentTitle=req.query.dtitle;
+    const title=req.query.title;
+
+    if(title){
+        res.render("task_des",{taskdate,parentTitle,title});
+    }else{
+        res.render("task_des",{taskdate,parentTitle});
+    }
+    
 });
+
+// Example Express.js route
+app.post('/update-task', async (req, res) => {
+    const { dtitle,date,title,utitle,udescription } = req.body;
+    console.log(req.body);
+    try {
+        if (title != 'null') {
+        // Update subtask
+        console.log('subtask is working');
+        const task = await Task.findOne({date: date, title: dtitle });
+        if (task) {
+            const subtask = task.subtasks.find(st => st.title === title);
+            if (subtask) {
+                subtask.title = utitle;
+                subtask.description = udescription;
+                await task.save();
+                return res.status(200).send('Subtask updated successfully');
+            }
+        }
+        return res.status(404).send('Subtask not found');
+        } else {
+        // Update main task
+        console.log('task is done for');
+        const task = await Task.findOne({ date: date, title: dtitle });
+        if (task) {
+            task.title = utitle;
+            task.description = udescription;
+            await task.save();
+            return res.status(200).send('Task updated successfully');
+        }
+        return res.status(404).send('Task not found');
+        }
+    } catch (error) {
+        console.error('Error updating task:', error);
+        res.status(500).send('Internal server error');
+    }
+});
+
+
 
 // Register User
 app.post("/signup", async (req, res) => {

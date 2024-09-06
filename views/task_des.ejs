@@ -10,7 +10,7 @@
   <div class="container">
     <div class="input-container">
       <h4 class="title">Title</h4>
-      <input type="text" id="input" >
+      <input type="text" id="input" value="<%= title==='null' ?  parentTitle : title  %>">
       <h4 class="des">Description</h4>
       <textarea id="description" ></textarea>
     </div>
@@ -18,12 +18,44 @@
       
       <button id="backBtn" onclick="back()"><img src="leftb.svg" alt="">Back</button>
       <button id="cancelBtn" onclick="cancel()"><img src="cancel.svg" alt="">Cancel</button>
-      <button id="saveBtn" onclick="save()"><img src="saveb.svg" alt="">Save</button>
+      <button id="saveButton" onclick="save()"><img src="saveb.svg" alt="">Save</button>
     </div>
   </div>
   <script>
-        // Embed the server-side variable in a script tag
-        const taskdate = '<%= taskdate %>';
+    const taskdate = '<%= taskdate %>';
+    const parentTitle = '<%= parentTitle %>';
+    const title = '<%= title %>';
+    
+    
+    document.getElementById('saveButton').addEventListener('click', function() {
+      const utitle=document.getElementById("input").value;
+      const udescription=document.getElementById("description").value;
+      console.log(utitle,udescription);
+      fetch('/update-task', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          dtitle: parentTitle,
+          date: taskdate,
+          title: title,
+          utitle: utitle,
+          udescription: udescription
+        })
+      }).then(response => {
+        if (response.ok) {
+          console.log('Task updated successfully');
+          window.location.href = `/task?date=${encodeURIComponent(taskdate)}`;
+        } else {
+          alert('Error updating task!');
+        }
+      }).catch(error => {
+        console.error('Error:', error);
+      });
+    });
+    
+    
   </script>
   <script src="task_des.js"></script>
   

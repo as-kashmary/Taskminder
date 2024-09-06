@@ -1,22 +1,27 @@
 const mongoose = require('mongoose');
-const connect = mongoose.connect("mongodb://127.0.0.1:27017/Taskminder");
 
-// Check database connected or not
+// Using the provided MongoDB Atlas connection string
+const connect = mongoose.connect("mongodb+srv://ask:12345678ab@cluster0.dz4ax.mongodb.net/Taskminder?retryWrites=true&w=majority&appName=Cluster0", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+});
+
+// Check if the database is connected or not
 connect.then(() => {
-    console.log("Database Connected Successfully");
+    console.log("Database Connected Successfully to MongoDB Atlas");
 })
-.catch(() => {
-    console.log("Database cannot be Connected");
-})
+.catch((err) => {
+    console.log("Database cannot be connected:", err);
+});
 
 // Create Schema
 const Loginschema = new mongoose.Schema({
     name: {
-        type:String,
+        type: String,
         required: true
     },
     email: {
-        type:String,
+        type: String,
         required: true
     },
     password: {
@@ -25,7 +30,7 @@ const Loginschema = new mongoose.Schema({
     }
 });
 
-// collection part
-const collection = new mongoose.model("users", Loginschema);
+// Collection part
+const collection = mongoose.model("users", Loginschema);
 
 module.exports = collection;

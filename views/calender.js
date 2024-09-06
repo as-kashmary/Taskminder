@@ -39,58 +39,54 @@ const months = [
 
 
 
-const eventsArr = [];
 eventsArr.push(
   {
-    day: 18,
-    month: 5,
+    day: 10,
+    month: 8,
     year: 2024,
     events: [
       {
         title: "Doctor Appointment",
-        time: "10:00 AM - 11:00 AM",
-      },
-      {
-        title: "Team Meeting",
-        time: "2:00 PM - 3:00 PM",
-      },
+        
+      }
     ],
   },
   {
-    day: 17,
-    month: 5,
+    day: 10,
+    month: 8,
     year: 2024,
     events: [
       {
         title: "Lunch with Sarah",
-        time: "12:00 PM - 1:00 PM",
       },
     ],
   },
   {
-    day: 19,
-    month: 5,
+    day: 8,
+    month: 8,
     year: 2024,
     events: [
       {
         title: "Project Deadline",
-        time: "5:00 PM - 6:00 PM",
       },
     ],
   },
   {
-    day: 14,
-    month: 5,
+    day: 6,
+    month: 8,
     year: 2024,
     events: [
       {
         title: "Gym Session",
-        time: "7:00 AM - 8:00 AM",
       },
     ],
   },
 );
-console.log(eventsArr);
+
+
+document.addEventListener('DOMContentLoaded', function() {
+ console.log(eventsArr);
+});
 
 //function to add days in days with class day and prev-date next-date on previous month and next month days and active on today
 function initCalendar() {
@@ -289,7 +285,7 @@ function updateEvents(date) {
               <h3 class="event-title">${event.title}</h3>
             </div>
             <div class="event-time">
-              <span class="event-time">${event.time}</span>
+              
             </div>
         </div>`;
       });

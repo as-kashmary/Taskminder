@@ -2,7 +2,7 @@ const express = require("express");
 const path = require("path");
 const collection = require("./config");
 const Task = require("./task");
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const session = require('express-session');
 
 const app = express();

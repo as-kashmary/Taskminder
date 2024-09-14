@@ -86,7 +86,7 @@ app.get("/calender", async(req, res) => {
             eventsArr.push(event);
            
         });
-        console.log(eventsArr);
+        //console.log(eventsArr);
         res.render("calender", {  user: req.session.user,eventsArr });
                 
     } catch (err) {
@@ -139,10 +139,12 @@ app.post('/save-task', async (req, res) => {
             email: req.session.user.email,
             date: taskdate,
             title: task.content,
-            description:  "", // Use provided description or default to an empty string
+            description:  "", // Use provided description or default to an empty string,
+            prog: task.prog,
             subtasks: task.subtasks ? task.subtasks.map(subtask => ({
                 title: subtask.content,
-                description:  "" // Use provided description or default to an empty string
+                description:  "",// Use provided description or default to an empty string
+                prog: subtask.prog
             })) : []
         }));
 
@@ -160,23 +162,45 @@ app.get('/load-tasks', async (req, res) => {
 
     try {
         const tasks = await Task.find({ email:req.session.user.email ,date: taskdate });
+        //const tasks = await Task.find({ email: req.session.user.email, date: taskdate });
+
+        // Loop through each task and log its subtasks
+        // tasks.forEach(task => {
+        //     console.log(task.subtasks);
+        // });
+
         res.status(200).json(tasks);
     } catch (err) {
         console.error(err);
         res.status(500).send('Error loading tasks');
     }
 });
-app.get('/task_des', (req, res) => {
+app.get('/task_des', async(req, res) => {
     const taskdate = req.query.taskdate;
     const parentTitle=req.query.dtitle;
     const title=req.query.title;
-
-    if(title){
-        res.render("task_des",{taskdate,parentTitle,title});
-    }else{
-        res.render("task_des",{taskdate,parentTitle});
-    }
+    const k=req.query.k;
+    const task = await Task.findOne({date: taskdate, title: parentTitle ,email:req.session.user.email });
     
+    try{
+        console.log("Title is:", title, typeof title);
+        if (k=="1") {
+            //console.log("Subtask is passing");
+            const subtask = task.subtasks.find(st => st.title === title);
+            const des=subtask.description;      
+            //console.log(parentTitle+" "+title+" "+des);
+
+            res.render("task_des",{taskdate,parentTitle,title,des});
+        }else{
+            //console.log("task is passing");
+            const des=task.description;
+            //console.log(des);
+            //
+            res.render("task_des",{taskdate,parentTitle,title,des});
+        }
+    }catch(err){
+        
+    }
 });
 
 // Example Express.js route
@@ -187,26 +211,26 @@ app.post('/update-task', async (req, res) => {
         if (title != 'null') {
         // Update subtask
         console.log('subtask is working');
-        const task = await Task.findOne({date: date, title: dtitle });
+        const task = await Task.findOne({date: date, title: dtitle ,email:req.session.user.email });
         if (task) {
             const subtask = task.subtasks.find(st => st.title === title);
             if (subtask) {
                 subtask.title = utitle;
                 subtask.description = udescription;
                 await task.save();
-                return res.status(200).send('Subtask updated successfully');
+                return res.status(200).send('');
             }
         }
         return res.status(404).send('Subtask not found');
         } else {
         // Update main task
         console.log('task is done for');
-        const task = await Task.findOne({ date: date, title: dtitle });
+        const task = await Task.findOne({ date: date, title: dtitle ,email:req.session.user.email });
         if (task) {
             task.title = utitle;
             task.description = udescription;
             await task.save();
-            return res.status(200).send('Task updated successfully');
+            return res.status(200).send('');
         }
         return res.status(404).send('Task not found');
         }
@@ -270,12 +294,27 @@ app.post("/signin", async (req, res) => {
         res.send("wrong Details");
     }
 });
-app.get("/profile", (req, res) => {
+app.get("/profile", async(req, res) => {
     if (!req.session.user) {
         return res.redirect("/signin");
     }
+    let ct=0,it=0;
     //console.log('User data saved to session:', req.session.user);
-    res.render("userdash", { user: req.session.user });
+    const tasks = await Task.find({ email: req.session.user.email });
+    console.log(tasks);
+    tasks.forEach(task => {
+        if (task ) {
+            if(task.prog==="Done"){
+                ct++;
+            }else{
+                it++;
+            }
+            //return res.status(200).send('Task updated successfully');
+            //console.log(ct+" "+it);
+        }
+    });              
+         //console.log("ct type:", typeof ct, "it type:", typeof it);
+    res.render("userdash", { user: req.session.user ,ct:ct,it:it });
 });
 app.get('/logout', (req, res) => {
   req.session.destroy(err => {

@@ -4,10 +4,11 @@ let n=1,s=1;
 function addTask() {
     const row = document.createElement("tr");
     
-
     const cell = document.createElement("td");
     const table = document.getElementById("task-table");
+
     const task_index=table.rows.length + 1;
+
     const task_div = document.createElement("div");
     task_div.classList.add("task-div");
     
@@ -27,7 +28,8 @@ function addTask() {
     editLink.innerHTML = '<img src="edit_pic.svg">';
     editLink.classList.add("editLink");
     editLink.addEventListener('click', function() {
-        window.location.href = `/task_des?taskdate=${encodeURIComponent(taskdate)}&dtitle=${encodeURIComponent(title)}&title=${null}`;
+        window.location.href = `/task_des?taskdate=${encodeURIComponent(taskdate)}&dtitle=${encodeURIComponent(title)}&title=${null}&k=0`;
+        console.log(`From task.js ${title} `);
     });
     task.appendChild(editLink);
 
@@ -66,12 +68,12 @@ function addTask() {
     row.append(cell);
     table.append(row);
 
-    // row.dataset.index = task_index;
-    // row.setAttribute('draggable', 'true'); // Make task draggable
-    // row.addEventListener('dragstart', dragStart);
-    // row.addEventListener('dragover', dragOver);
-    // row.addEventListener('drop', drop);
-
+    
+    row.dataset.index = task_index;
+    row.setAttribute('draggable', 'true');
+    row.addEventListener('dragstart', dragStart);
+    row.addEventListener('dragover', dragOver);
+    row.addEventListener('drop', drop);
     //saveTaskToServer();
 }
 
@@ -102,7 +104,8 @@ function loadTasks() {
             editLink.innerHTML = '<img src="edit_pic.svg">';
             editLink.classList.add("editLink");
             editLink.addEventListener('click', function() {
-                window.location.href = `/task_des?taskdate=${encodeURIComponent(taskdate)}&dtitle=${encodeURIComponent(title)}&title=${null}`;
+                window.location.href = `/task_des?taskdate=${encodeURIComponent(taskdate)}&dtitle=${encodeURIComponent(title)}&title=${null}&k=0`;
+                console.log(`From task.js ${title} `);
             });
             task1.appendChild(editLink);
 
@@ -118,11 +121,12 @@ function loadTasks() {
             task1.appendChild(del);
 
             const divSpan2 = document.createElement("span");
-            divSpan2.textContent = "In Progress";
+            divSpan2.textContent = task.prog;
             divSpan2.classList.add("div-span-2");
             divSpan2.addEventListener("click", function() {
                 divSpan2.innerHTML = divSpan2.innerHTML === "In Progress" ? "Done" : "In Progress";
             });
+            //console.log(task.title+" "+task.prog);
 
             task1.append(divSpan2);
             task_div.append(task1);
@@ -137,36 +141,61 @@ function loadTasks() {
             addButton.classList.add("add-button");
             subTaskContainer.append(addButton);
 
+            const task_index=taskTable.rows.length + 1;
+            row.dataset.index = task_index;
+            row.setAttribute('draggable', 'true');
+            row.addEventListener('dragstart', dragStart);
+            row.addEventListener('dragover', dragOver);
+            row.addEventListener('drop', drop);
+
             task.subtasks.forEach(subtask => {
+                //console.log(subtask.title+" "+subtask.prog);
                 const subTaskDiv = document.createElement("div");
                 subTaskDiv.classList.add("sub-task-div");
                 subTaskDiv.classList.add("sub-task-div");
-                subTaskDiv.setAttribute('draggable', true);  // New line: Make subtask draggable
-                subTaskDiv.addEventListener('dragstart', dragStart);  // New line: Add dragstart event listener
-                subTaskDiv.addEventListener('dragover', dragOver);  // New line: Add dragover event listener
-                subTaskDiv.addEventListener('drop', drop);  // New line: Add drop event listener
 
+                var subtaskIndex = subTaskContainer.querySelectorAll(".sub-task-div").length + 1;
+
+                subTaskDiv.dataset.index = subtaskIndex;
+                subTaskDiv.setAttribute('draggable', 'true');
+                subTaskDiv.addEventListener('dragstart', subtaskDragStart);
+                subTaskDiv.addEventListener('dragover', dragOver);
+                subTaskDiv.addEventListener('drop', subtaskDrop);
 
                 const checkBox = document.createElement("input");
                 checkBox.type = "checkbox";
                 checkBox.addEventListener("change", function() {
-                    span2.innerHTML = checkBox.checked ? "Done" : "In Progress";
+                    subtaskSpan.innerHTML = checkBox.checked ? "Done" : "In Progress";
                 });
 
                 const subtaskTitle = document.createElement("p");
                 subtaskTitle.textContent = subtask.title;
 
-                const span2 = document.createElement("span");
-                span2.innerHTML = "In Progress";
-                span2.classList.add("span2");
-                span2.addEventListener("click", function() {
-                    span2.innerHTML = span2.innerHTML === "In Progress" ? "Done" : "In Progress";
+                const subtaskSpan = document.createElement("span"); // Subtask progress span
+                subtaskSpan.textContent = subtask.prog; // Correctly assign subtask progress
+                if (subtaskSpan.innerHTML === "In Progress") {
+                    
+                    checkBox.checked = false;  // Automatically check the checkbox when "Done"
+                } else {
+                    
+                    checkBox.checked = true; // Uncheck the checkbox when "In Progress"
+                }
+                subtaskSpan.classList.add("span2");
+                subtaskSpan.addEventListener("click", function() {
+                    //span2.innerHTML = span2.innerHTML === "In Progress" ? "Done" : "In Progress";
+                    if (subtaskSpan.innerHTML === "In Progress") {
+                        subtaskSpan.innerHTML = "Done";
+                        checkBox.checked = true;  // Automatically check the checkbox when "Done"
+                    } else {
+                        subtaskSpan.innerHTML = "In Progress";
+                        checkBox.checked = false; // Uncheck the checkbox when "In Progress"
+                    }
                 });
-                console.log(title,subtask.title);
+                //console.log(title,subtask.title);
                 const editSubLink = document.createElement("a");
                 editSubLink.innerHTML = '<img src="edit_pic.svg">';
                 editSubLink.addEventListener('click', function() {
-                    window.location.href = `/task_des?taskdate=${encodeURIComponent(taskdate)}&dtitle=${encodeURIComponent(title)}&title=${subtask.title}`;
+                    window.location.href = `/task_des?taskdate=${encodeURIComponent(taskdate)}&dtitle=${encodeURIComponent(title)}&title=${subtask.title}&k=1`;
                 });
                 editSubLink.classList.add("editLink");
 
@@ -183,7 +212,7 @@ function loadTasks() {
                 subTaskDiv.appendChild(subtaskTitle);
                 subTaskDiv.appendChild(editSubLink);
                 subTaskDiv.appendChild(delSub);
-                subTaskDiv.appendChild(span2);
+                subTaskDiv.appendChild(subtaskSpan);
 
                 subTaskContainer.appendChild(subTaskDiv);
             });
@@ -224,11 +253,18 @@ function addSubtask(event) {
 
     span1.textContent = title;
     s++;
-    console.log(parentTitle,title);
+    //console.log(parentTitle,title);
     span2.innerHTML = "In Progress";
     span2.classList.add("span2");
     span2.addEventListener("click", function() {
-        span2.innerHTML = span2.innerHTML === "In Progress" ? "Done" : "In Progress";
+        //span2.innerHTML = span2.innerHTML === "In Progress" ? "Done" : "In Progress";
+        if (span2.innerHTML === "In Progress") {
+            span2.innerHTML = "Done";
+            checkBox.checked = true;  // Automatically check the checkbox when "Done"
+        } else {
+            span2.innerHTML = "In Progress";
+            checkBox.checked = false; // Uncheck the checkbox when "In Progress"
+        }
     });
 
     subTaskDiv.appendChild(checkBox);
@@ -240,7 +276,7 @@ function addSubtask(event) {
     editLink.innerHTML = '<img src="edit_pic.svg">';
     editLink.classList.add("editLink");
     editLink.addEventListener('click', function() {
-        window.location.href = `/task_des?taskdate=${encodeURIComponent(taskdate)}&dtitle=${encodeURIComponent(parentTitle)}&title=${title}`;
+        window.location.href = `/task_des?taskdate=${encodeURIComponent(taskdate)}&dtitle=${encodeURIComponent(parentTitle)}&title=${title}&k=1`;
     });
     subTaskDiv.appendChild(editLink);
 
@@ -261,10 +297,11 @@ function addSubtask(event) {
     parentCell.appendChild(subTaskDiv);
 
     subTaskDiv.dataset.index = subtaskIndex;
-    subTaskDiv.setAttribute('draggable', 'true'); // Make subtask draggable
-    subTaskDiv.addEventListener('dragstart', dragStart);
+    subTaskDiv.dataset.index = subtaskIndex;
+    subTaskDiv.setAttribute('draggable', 'true');
+    subTaskDiv.addEventListener('dragstart', subtaskDragStart);
     subTaskDiv.addEventListener('dragover', dragOver);
-    subTaskDiv.addEventListener('drop', drop);
+    subTaskDiv.addEventListener('drop', subtaskDrop);
 }
 
 function saveTaskToServer() {
@@ -279,6 +316,8 @@ function saveTaskToServer() {
             if (taskdiv) {
                 const taskName = taskdiv.querySelector('p');
                 const taskContent = taskName ? taskName.textContent.trim() : '';
+                const prog = taskdiv.querySelector('span').textContent.trim();
+                //console.log(prog);
                 //console.log(taskContent);
                 // alert("press");
                 // Select subtasks within the current task
@@ -289,12 +328,14 @@ function saveTaskToServer() {
                     if (subtaskDiv) {
                         const subtaskName = subtaskDiv.querySelector('p');
                         const subtaskContent = subtaskName ? subtaskName.textContent.trim() : '';
+                        const prog1 = subtaskDiv.querySelector('span').textContent.trim();
+                        //console.log(prog1);
                         //console.log(subtaskContent);
                         //console.log(Subtask ${subtaskIndex + 1} for Task ${index + 1}:, subtaskContent);
-                        subs.push({ content: subtaskContent , description: ''});
+                        subs.push({ content: subtaskContent , description: '', prog: prog1});
                     }
                 });               
-                tasks.push({ content: taskContent, description: '', subtasks: subs });
+                tasks.push({ content: taskContent,prog: prog, description: '', subtasks: subs });
                 
             }
         });
@@ -326,69 +367,96 @@ function dragStart(event) {
   event.dataTransfer.setData("text/plain", event.target.dataset.index);
 }
 
+function subtaskDragStart(event) {
+    event.dataTransfer.setData("text/plain", event.target.dataset.index);  // Store dragged subtask index
+    event.target.classList.add("dragging");  // Optional: Add class for visual feedback
+}
+
 function dragOver(event) {
     event.preventDefault();  // Necessary to allow a drop
 }
 
-function drop(event) {
+function subtaskDrop(event) {
     event.preventDefault();
-    const draggedIndex = event.dataTransfer.getData("text/plain");
-    const targetIndex = event.target.dataset.index;
 
-    if (draggedIndex !== targetIndex) {
-        const taskTable = document.getElementById('task-table');
-        const draggedElement = taskTable.querySelector(`[data-index="${draggedIndex}"]`);
-        const targetElement = taskTable.querySelector(`[data-index="${targetIndex}"]`);
-
-        //console.log(targetElement);
-        if(targetElement!= null){
-            const targetParent = targetElement.parentNode;
-            console.log(targetParent);
-
-            const draggedParent = draggedElement.parentNode;
-
-            targetParent.insertBefore(draggedElement, targetElement.nextSibling);
-            draggedParent.insertBefore(targetElement, draggedElement.nextSibling);
-
-        }else{
-            console.log(taskTable);
-        }
-
+    const draggedIndex = event.dataTransfer.getData("text/plain");  // Get the dragged subtask index
+    const targetSubtask = event.target.closest('.sub-task-div');  // Get the target subtask div
+    
+    const parentContainer = targetSubtask.closest('.sub-task-container');
+    const draggedSubtask = parentContainer.querySelector(`.sub-task-div[data-index="${draggedIndex}"]`);  // Find the dragged subtask div
+    // console.log(`dragged ${draggedSubtask.span1}`);
+    // console.log(`Target ${targetSubtask.span1}`);
+    
+    if (draggedSubtask && targetSubtask && draggedSubtask !== targetSubtask) {
         
-        //saveTaskToServer();
+        
+
+        // Clone both subtasks
+        const draggedClone = draggedSubtask.cloneNode(true);
+        const targetClone = targetSubtask.cloneNode(true);
+
+        console.log("Parent Container:", parentContainer);
+        console.log("--------");
+        console.log("Dragged Subtask:", draggedSubtask);
+        console.log("--------");
+        console.log("Target Clone:", targetClone);
+        console.log("--------");
+
+
+        // Swap the subtasks in the container
+        if (parentContainer.contains(draggedSubtask) && parentContainer.contains(targetSubtask)) {
+            parentContainer.replaceChild(draggedClone, targetSubtask);
+            parentContainer.replaceChild(targetClone, draggedSubtask);
+        } else {
+            console.error("draggedSubtask is not a child of parentContainer");
+        }
+        
+
+        // Reassign event listeners after swapping
+        reassignSubtaskEventListeners(draggedClone);
+        reassignSubtaskEventListeners(targetClone);
     }
 }
 
-// function drop(event) {
-//     event.preventDefault();
+function reassignSubtaskEventListeners(subTaskDiv) {
+    // Reassign all event listeners for the cloned subtask
+    subTaskDiv.setAttribute('draggable', 'true');
+    subTaskDiv.addEventListener('dragstart', subtaskDragStart);
+    subTaskDiv.addEventListener('dragover', dragOver);
+    subTaskDiv.addEventListener('drop', subtaskDrop);
+}
+
+function drop(event) {
+    event.preventDefault();
     
-//     const draggedElementId = event.dataTransfer.getData("text/plain");
-//     const draggedElement = document.getElementById(draggedElementId);
-    
-//     let target = event.target;
+    const draggedIndex = event.dataTransfer.getData("text/plain");  // Get the dragged task index
+    const targetRow = event.target.closest('tr');  // Get the target task row
+    const draggedRow = document.querySelector(`tr[data-index="${draggedIndex}"]`);  // Find the dragged row
 
-//     // Find the closest parent task or subtask container
-//     while (target && !target.classList.contains('task-div') && !target.classList.contains('sub-task-container') && !target.classList.contains('sub-task-div')) {
-//         target = target.parentNode;
-//     }
+    if (draggedRow && targetRow && draggedRow !== targetRow) {
+        const table = document.getElementById("task-table");
 
-//     if (target && draggedElement) {
-//         if (target.classList.contains('task-div')) {
-//             // Insert the dragged task before the target task
-//             target.closest('tr').parentNode.insertBefore(draggedElement.closest('tr'), target.closest('tr').nextSibling);
-//         } else if (target.classList.contains('sub-task-div')) {
-//             // Insert the dragged subtask before or after the target subtask
-//             target.parentNode.insertBefore(draggedElement, target.nextSibling);
-//         } else if (target.classList.contains('sub-task-container')) {
-//             // Append the dragged subtask to the sub-task-container if dropping outside any sub-task-div
-//             target.appendChild(draggedElement);
-//         }
-//     }
-// }
+        // Clone both rows
+        const draggedClone = draggedRow.cloneNode(true);
+        const targetClone = targetRow.cloneNode(true);
 
+        // Swap the rows in the table
+        table.replaceChild(draggedClone, targetRow);
+        table.replaceChild(targetClone, draggedRow);
 
+        // Reassign event listeners after swapping (since clones don't retain listeners)
+        reassignEventListeners(draggedClone);
+        reassignEventListeners(targetClone);
+    }
+}
 
-
+function reassignEventListeners(row) {
+    // Reassign all event listeners for the cloned row
+    row.setAttribute('draggable', 'true');
+    row.addEventListener('dragstart', dragStart);
+    row.addEventListener('dragover', dragOver);
+    row.addEventListener('drop', drop);
+}
 
 
   function redirectToProfile() {

@@ -5,7 +5,7 @@ function back() {
   
  function save() {
     // Code to save input and description
-    alert("Data saved successfully!");
+    //alert("Data saved successfully!");
   };
   
  function cancel() {

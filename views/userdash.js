@@ -2,9 +2,9 @@
 
 // Sample progress data
 const progressData = {
-    completedTasks: 20,
-    tasksInProgress: 10,
-    overdueTasks: 5
+    completedTasks: ct,
+    tasksInProgress: it,
+    
 };
 
 // Function to display progress overview
@@ -13,7 +13,7 @@ function displayProgressOverview() {
     progressInfo.innerHTML = `
         <p>Completed Tasks: ${progressData.completedTasks}</p>
         <p>Tasks in Progress: ${progressData.tasksInProgress}</p>
-        <p>Overdue Tasks: ${progressData.overdueTasks}</p>
+        
     `;
 }
 

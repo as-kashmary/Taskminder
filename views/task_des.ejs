@@ -12,7 +12,7 @@
       <h4 class="title">Title</h4>
       <input type="text" id="input" value="<%= title==='null' ?  parentTitle : title  %>">
       <h4 class="des">Description</h4>
-      <textarea id="description" ></textarea>
+      <textarea id="description" ><%= des %></textarea>
     </div>
     <div class="button-container">
       
@@ -22,12 +22,14 @@
     </div>
   </div>
   <script>
+    
     const taskdate = '<%= taskdate %>';
     const parentTitle = '<%= parentTitle %>';
     const title = '<%= title %>';
     
     
     document.getElementById('saveButton').addEventListener('click', function() {
+      
       const utitle=document.getElementById("input").value;
       const udescription=document.getElementById("description").value;
       console.log(utitle,udescription);
@@ -45,10 +47,11 @@
         })
       }).then(response => {
         if (response.ok) {
-          console.log('Task updated successfully');
+          console.log('Task updated successfully from task des');
           window.location.href = `/task?date=${encodeURIComponent(taskdate)}`;
         } else {
-          alert('Error updating task!');
+          alert('Error updating task! from task des');
+          window.location.href = `/task?date=${encodeURIComponent(taskdate)}`;
         }
       }).catch(error => {
         console.error('Error:', error);

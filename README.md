@@ -1,14 +1,15 @@
 # Taskminder
 
-# Live website
-https://taskminder-4.onrender.com/
+## Live website https://taskminder-4.onrender.com/
 
 **Taskminder** is a task management web application designed to help users organize and track their tasks and subtasks efficiently. It provides an intuitive interface to manage tasks, create subtasks, and view them on a calendar.
 
 ## Features
 - Add, edit, and delete tasks and subtasks dynamically.
 - Calendar view to track tasks based on dates.
-- Responsive design.
+- Prioritize your tasks and subtasks
+- Can set timer for your tasks
+- Can set description for your tasks
 
 ## Technologies Used
 - **Frontend**: HTML, CSS, JavaScript, EJS

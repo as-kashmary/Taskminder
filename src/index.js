@@ -272,28 +272,30 @@ app.post("/signup", async (req, res) => {
 });
 
 // Login user 
+
 app.post("/signin", async (req, res) => {
     try {
         const check = await collection.findOne({ email: req.body.email });
         if (!check) {
-            return res.send("User not found")
+            return res.send("User not found");
         }
+        
         // Compare the hashed password from the database with the plaintext password
-        const isPasswordMatch = await req.body.password;
-        //const isPasswordMatch = await bcrypt.compare(req.body.password, check.password);
+        const isPasswordMatch = await bcrypt.compare(req.body.password, check.password);
+        
         if (!isPasswordMatch) {
-            res.send("wrong Password");
-        }
-        else {
+            return res.send("Wrong password");
+        } else {
             req.session.user = check; // Store user data in session
-            //console.log('User data saved to session:', req.session.user);
             return res.redirect("/");
         }
-    }
-    catch {
-        res.send("wrong Details");
+    } catch (error) {
+        console.error(error); // Log error for debugging
+        return res.send("Wrong details");
     }
 });
+
+
 app.get("/profile", async(req, res) => {
     if (!req.session.user) {
         return res.redirect("/signin");
